@@ -1,0 +1,88 @@
+//Linear probing
+#include <iostream>
+using namespace std;
+
+class HashTable {
+    int size;
+    int* table;
+
+public:
+    HashTable(int s) {
+        size = s;
+        table = new int[size];
+        for (int i = 0; i < size; i++) {
+         table[i] = -1; 
+        }
+           
+    }
+
+    // Hash function
+    int hashFunction(int key) {
+        return key % size;
+    }
+
+    // Insert using linear probing
+    void insert(int key) {
+        int index = hashFunction(key);
+        int i = 0;
+        int newIndex = index;
+
+        // Linear probing: try (index + i) % size
+        while (table[newIndex] != -1) {
+            i++;
+            if (i == size) { // table full
+                cout << "Hash Table Full! Cannot insert " << key << endl;
+                return;
+            }
+            newIndex = (index + i) % size;
+        }
+
+        table[newIndex] = key;
+        cout << "Inserted " << key << " at index " << newIndex << endl;
+    }
+
+    //Search 
+    void search(int key) {
+        int index = hashFunction(key);
+        int i = 0;
+        int newIndex = index;
+
+        while (table[newIndex] != -1 && i < size) {
+            if (table[newIndex] == key) {
+                cout << key << " found at index " << newIndex << endl;
+                return;
+            }
+            i++;
+            newIndex = (index + i) % size;
+        }
+
+        cout << key << " not found in the table" << endl;
+        return;
+    }
+    // Display hash table
+    void display() {
+        cout << "\nHash Table:\n";
+        for (int i = 0; i < size; i++) {
+            cout << i << " -> ";
+            if (table[i] != -1){
+                cout << table[i]<<endl;
+            }
+                
+            else
+                cout << "-"<<endl;
+        }
+    }
+};
+
+int main() {
+    HashTable ht(11); // Table size 11, prefer prime number like 2, 3, 5 7 11 13 17 19 for size, its best for wuadratic probing, rason you can search in gpt.
+
+    ht.insert(12);
+    ht.insert(22);
+    ht.insert(32);
+    ht.insert(42);
+    ht.insert(15);
+    ht.insert(25);
+
+    ht.display();
+}
